@@ -1,19 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Pressable} from 'react-native';
 
-export default function Welcome() {
+export default function Welcome({navigation}) {
+
+  const click = () => {
+    navigation.navigate('Main')
+  }
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <Image source={require('../assets/Images/mainlogo.png')} style={{ width: 150, height: 150 }}/>
-      <Text style={styles.main}>Continue as a guest</Text>
-      <Pressable style={styles.button}>
+      <Text style={styles.main}>CryptoStack</Text>
+      <Text style={styles.submain}>Track crypto in seconds!</Text>
+      <Pressable style={styles.button} onPress={()=> click()}>
           <Text style={styles.text}>Continue</Text>
       </Pressable>
-      <Pressable style={styles.button}>
-          <Text style={styles.text}>Exit</Text>
-      </Pressable>
-      <Text style={styles.sub}>Google OAuth is unavailable at v1.0.0</Text>
+      <Text style={styles.sub}>v1.0.0 Developed by Aryamitra Chaudhuri</Text>
     </View>
   );
 }
@@ -26,10 +28,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   main: {
-    marginTop: 120,
-    marginBottom: 20,
+    marginTop: 20,
     fontSize: 22,
-    color: "white"
+    color: "white",
+  },
+  submain: {
+    marginTop: 10,
+    marginBottom: 100,
+    fontSize: 15,
+    color: "#605F93",
+    width: "50%",
+    textAlign: "center"
   },
   sub: {
     position: "absolute",
