@@ -1,9 +1,15 @@
-import { TouchableOpacity, Text, StyleSheet, Image, View } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet, Image, View,Alert } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useNavigation } from '@react-navigation/native';
 
 const Coin = (props) => {
+    const navigation = useNavigation(); 
+    const hello = (id)=>{
+        navigation.navigate('CoinDetails', { coinid: `${id}` })
+    }
+    
     return (
-        <TouchableOpacity style={styles.crypto}>
+        <TouchableOpacity style={styles.crypto} onPress={()=> hello(props.element.id)}>
             <View style={styles.cryptochild1}>
                 <Image
                     style={styles.cryptochild1_image}

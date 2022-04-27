@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
+import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl,Alert,TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useEffect, useState } from 'react';
+
 //axios
 import { fetchData } from '../API/api';
 import Coin from './Coin';
@@ -9,7 +10,7 @@ import Coin from './Coin';
 
 
 const Main = () => {
-
+  
   const [data, setdata] = useState([]);
   const [loader, setloader] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -26,13 +27,13 @@ const Main = () => {
   }, [])
 
 
-
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       {loader && <ActivityIndicator style={styles.loader} />}
       <FlatList
-      refreshControl={
+        style={{marginBottom: 20}}
+        refreshControl={
         <RefreshControl
         onRefresh={()=> getResult()}
         refreshing={loading}
@@ -46,7 +47,7 @@ const Main = () => {
         data={data}
         renderItem={(element) => {
           return (
-            <Coin element={element.item} />
+              <Coin element={element.item}/>
           )
         }} />
     </View>

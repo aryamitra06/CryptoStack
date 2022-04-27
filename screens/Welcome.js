@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Welcome({navigation}) {
-  const name = "aryamitra";
+export default function Welcome() {
+  const navigation = useNavigation(); 
   const click = () => {
-    navigation.navigate('Main', {myname: `${name}`})
+    navigation.navigate('Main')
   }
   return (
     <View style={styles.container}>
