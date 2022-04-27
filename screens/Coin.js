@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, StyleSheet, Image, View,Alert } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet, Image, View} from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,7 +23,7 @@ const Coin = (props) => {
 
             <View style={styles.cryptochild2}>
                 <View>
-                    <Text style={styles.coinprice}>${props.element.current_price}</Text>
+                    <Text style={styles.coinprice}>${props.element.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                     {props.element.price_change_percentage_24h < 0 ? (
                         <Text style={styles.pricechangered}><MaterialCommunityIcons name='arrow-down' size={16} color= "red"/> {props.element.price_change_percentage_24h.toFixed(2)}%</Text>
                     ) : (

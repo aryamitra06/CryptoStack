@@ -30,7 +30,7 @@ const Main = () => {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      {loader && <ActivityIndicator style={styles.loader} />}
+      {loader && <ActivityIndicator  color="#ffff" style={styles.loader} />}
       <FlatList
         style={{marginBottom: 20}}
         refreshControl={
