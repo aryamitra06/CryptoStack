@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
 import { fetchCoinData } from '../API/api';
+import { LineChart } from 'react-native-wagmi-charts';
 
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
@@ -24,6 +25,15 @@ const CoinDetails = ({ route }) => {
     if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
 
 
+    const abc = [
+        {
+          value: data.high_24h,
+        },
+        {
+          value: data.low_24h,
+        },
+      ];
+
     return (
         <>
             <View style={styles.container}>
@@ -36,7 +46,7 @@ const CoinDetails = ({ route }) => {
                     </View>
                     <View style={styles.uppar_text}>
                         <Text style={styles.uppar_text_1}>{data.name}</Text>
-                        <Text style={styles.uppar_text_2}>${data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                        <Text style={styles.uppar_text_2}>Current: ${data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                     </View>
                     <View style={styles.upper_status}>
                         <View style={styles.upper_status_1}>
@@ -56,6 +66,11 @@ const CoinDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.mid}>
+                    <LineChart.Provider data={abc} >
+                        <LineChart width={250} height={150}>
+                            <LineChart.Path color="hotpink"/>
+                        </LineChart>
+                    </LineChart.Provider>
                 </View>
             </View>
         </>
@@ -66,14 +81,21 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#181631',
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     uppar: {
         width: '100%',
         height: 80,
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#212245',
+        width: '95%',
+        borderRadius: 12,
+        marginTop: 2,
+        marginBottom: 5,
+        height: 100
+
     },
     uppar_image_view:
     {
@@ -92,7 +114,6 @@ const styles = StyleSheet.create({
     uppar_text_2: {
         color: "#DDDDDD",
         fontSize: 18,
-        fontWeight: 'bold',
     },
     upper_status: {
         alignItems: 'center',
@@ -119,10 +140,15 @@ const styles = StyleSheet.create({
     },
     mid: {
         width: '95%',
-        height: 200,
+        height: 180,
         backgroundColor: '#212245',
         borderRadius: 12,
-        marginTop: 5
+        marginTop: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    chart: {
+
     }
 }
 )
