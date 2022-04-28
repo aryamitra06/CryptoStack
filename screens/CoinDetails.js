@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions } from 're
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
 import { fetchCoinData, fetchPrice } from '../API/api';
-import {ChartDot, ChartPath, ChartPathProvider} from '@rainbow-me/animated-charts';
-
+import { ChartDot, ChartPath, ChartPathProvider } from '@rainbow-me/animated-charts';
+import { LineChart } from 'react-native-wagmi-charts';
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
     const [data, setdata] = useState([]);
@@ -27,13 +27,14 @@ const CoinDetails = ({ route }) => {
     if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
 
 
-    
 
-    const {width: SIZE} = Dimensions.get('window');
 
+    const { width: SIZE } = Dimensions.get('window');
+
+    const pricefinal = price.map(([timestamp,value]) => ({timestamp,value}))
+    console.log(pricefinal);
     return (
         <>
-            <ChartPathProvider data={{ points: price.map((p)=> ({x: p[0], y: p[1]})), smoothingStrategy: 'bezier' }}>
             <View style={styles.container}>
                 <View style={styles.uppar}>
                     <View style={styles.uppar_image_view}>
@@ -64,12 +65,13 @@ const CoinDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.mid}>
-                    
-                        <ChartPath height={SIZE / 2.7} stroke="hotpink" width={SIZE/1.05} />
-                        <ChartDot style={{ backgroundColor: 'blue' }} />
+                    <LineChart.Provider data={pricefinal}>
+                        <LineChart>
+                            <LineChart.Path />
+                        </LineChart>
+                    </LineChart.Provider>
                 </View>
             </View>
-                    </ChartPathProvider>
         </>
     )
 }
