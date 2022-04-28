@@ -8,7 +8,6 @@ const Coin = (props) => {
     const hello = (id)=>{
         navigation.navigate('CoinDetails', { coinid: `${id}` })
     }
-    
     return (
         <TouchableOpacity style={styles.crypto} onPress={()=> hello(props.element.id)}>
             <View style={styles.cryptochild1}>
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 15,
         backgroundColor: '#212245',
-        height: 120,
+        height: 100,
         width: "92%",
         borderRadius: 13,
         alignSelf: 'center',

@@ -1,15 +1,19 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
 import { fetchCoinData } from '../API/api';
+
+
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
-    const [data, setdata] = useState({ current_price: 0, price_change_percentage_24h: 0 });
+    const [data, setdata] = useState({ current_price: 0, price_change_percentage_24h: 0});
     const [loader, setloader] = useState(true);
+
 
     const getResult = async () => {
         const res = await fetchCoinData(coinid);
         setdata(res.data[0]);
+
         setloader(false);
     }
 
@@ -18,6 +22,7 @@ const CoinDetails = ({ route }) => {
     }, [])
 
     if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
+
     return (
         <>
             <View style={styles.container}>
@@ -113,9 +118,9 @@ const styles = StyleSheet.create({
         marginTop: 40
     },
     mid: {
-        width: '97%',
+        width: '95%',
         height: 200,
-        backgroundColor: 'white',
+        backgroundColor: '#212245',
         borderRadius: 12,
         marginTop: 5
     }
