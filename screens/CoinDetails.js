@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
 import { fetchCoinData } from '../API/api';
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
-    const [data, setdata] = useState({ current_price: 0 });
+    const [data, setdata] = useState({ current_price: 0, price_change_percentage_24h: 0 });
     const [loader, setloader] = useState(true);
 
     const getResult = async () => {
@@ -15,10 +16,11 @@ const CoinDetails = ({ route }) => {
     useEffect(() => {
         getResult();
     }, [])
+
+    if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
     return (
         <>
             <View style={styles.container}>
-            {loader && <ActivityIndicator color="#ffff" style={styles.loader} />}
                 <View style={styles.uppar}>
                     <View style={styles.uppar_image_view}>
                         <Image
@@ -30,6 +32,25 @@ const CoinDetails = ({ route }) => {
                         <Text style={styles.uppar_text_1}>{data.name}</Text>
                         <Text style={styles.uppar_text_2}>${data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                     </View>
+                    <View style={styles.upper_status}>
+                        <View style={styles.upper_status_1}>
+                            {data.price_change_percentage_24h < 0 ? (
+                                <MaterialCommunityIcons name='arrow-down' size={20} color="red" />
+                            ) : (
+                                <MaterialCommunityIcons name='arrow-up' size={20} color="#B4FF9F" />
+                            )}
+                        </View>
+
+                        {data.price_change_percentage_24h < 0 ? (
+                            <Text style={styles.upper_status_2_red}>{data.price_change_percentage_24h.toFixed(2)}%</Text>
+                        ) : (
+                            <Text style={styles.upper_status_2_green}>{data.price_change_percentage_24h.toFixed(2)}%</Text>
+                        )}
+
+                    </View>
+                </View>
+
+                <View style={styles.mid}>
                 </View>
             </View>
         </>
@@ -39,7 +60,8 @@ const CoinDetails = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#181631',
-        flex: 1
+        flex: 1,
+        alignItems: 'center'
     },
     uppar: {
         width: '100%',
@@ -67,8 +89,35 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    upper_status: {
+        alignItems: 'center',
+        flex: 1,
+    },
+    upper_status_2_green: {
+        color: "#B4FF9F",
+        fontSize: 20,
+        alignSelf: 'flex-end',
+        marginRight: 20
+    },
+    upper_status_2_red: {
+        color: "red",
+        fontSize: 20,
+        alignSelf: 'flex-end',
+        marginRight: 20
+    },
+    upper_status_1: {
+        alignSelf: 'flex-end',
+        marginRight: 20
+    },
     loader: {
-        flex: 1
+        marginTop: 40
+    },
+    mid: {
+        width: '97%',
+        height: 200,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        marginTop: 5
     }
 }
 )

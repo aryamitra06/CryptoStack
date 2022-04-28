@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as React from 'react';
 
 export default function Welcome() {
   const navigation = useNavigation(); 

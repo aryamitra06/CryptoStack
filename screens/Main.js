@@ -26,11 +26,10 @@ const Main = () => {
     getResult();
   }, [])
 
-
+  if(loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      {loader && <ActivityIndicator  color="#ffff" style={styles.loader} />}
       <FlatList
         style={{marginBottom: 20}}
         refreshControl={
@@ -59,8 +58,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#181631',
   },
   loader: {
-    marginTop: 15
-  }
+    marginTop: 40
+}
 }
 )
 export default Main

@@ -1,6 +1,7 @@
 import { TouchableOpacity, Text, StyleSheet, Image, View} from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native';
+import * as React from 'react';
 
 const Coin = (props) => {
     const navigation = useNavigation(); 
@@ -27,7 +28,7 @@ const Coin = (props) => {
                     {props.element.price_change_percentage_24h < 0 ? (
                         <Text style={styles.pricechangered}><MaterialCommunityIcons name='arrow-down' size={16} color= "red"/> {props.element.price_change_percentage_24h.toFixed(2)}%</Text>
                     ) : (
-                        <Text style={styles.pricechangegreen}><MaterialCommunityIcons name='arrow-up' size={16} color= "green"/> {props.element.price_change_percentage_24h.toFixed(2)}%</Text>
+                        <Text style={styles.pricechangegreen}><MaterialCommunityIcons name='arrow-up' size={16} color= "#B4FF9F"/> {props.element.price_change_percentage_24h.toFixed(2)}%</Text>
                     )}
                 </View>
             </View>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     pricechangegreen: {
-        color: 'green',
+        color: '#B4FF9F',
         fontSize: 14,
         alignSelf: 'flex-end',
     },
