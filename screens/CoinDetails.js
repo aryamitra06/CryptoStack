@@ -1,19 +1,22 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
-import { fetchCoinData } from '../API/api';
-import { LineChart } from 'react-native-wagmi-charts';
+import { fetchCoinData, fetchPrice } from '../API/api';
+import {ChartDot, ChartPath, ChartPathProvider} from '@rainbow-me/animated-charts';
 
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
     const [data, setdata] = useState([]);
     //current_price: 0, price_change_percentage_24h: 0
     const [loader, setloader] = useState(true);
+    const [price, setPrice] = useState([]);
 
 
     const getResult = async () => {
         const res = await fetchCoinData(coinid);
+        const priceres = await fetchPrice();
         setdata(res.data[0]);
+        setPrice(priceres.data.prices);
         setloader(false);
     }
 
@@ -21,21 +24,16 @@ const CoinDetails = ({ route }) => {
         getResult();
     }, [])
 
-
     if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
 
 
-    const abc = [
-        {
-          value: data.high_24h,
-        },
-        {
-          value: data.low_24h,
-        },
-      ];
+    
+
+    const {width: SIZE} = Dimensions.get('window');
 
     return (
         <>
+            <ChartPathProvider data={{ points: price.map((p)=> ({x: p[0], y: p[1]})), smoothingStrategy: 'bezier' }}>
             <View style={styles.container}>
                 <View style={styles.uppar}>
                     <View style={styles.uppar_image_view}>
@@ -66,13 +64,12 @@ const CoinDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.mid}>
-                    <LineChart.Provider data={abc} >
-                        <LineChart width={250} height={150}>
-                            <LineChart.Path color="hotpink"/>
-                        </LineChart>
-                    </LineChart.Provider>
+                    
+                        <ChartPath height={SIZE / 2.7} stroke="hotpink" width={SIZE/1.05} />
+                        <ChartDot style={{ backgroundColor: 'blue' }} />
                 </View>
             </View>
+                    </ChartPathProvider>
         </>
     )
 }
