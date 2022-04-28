@@ -3,17 +3,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useState, useEffect } from 'react'
 import { fetchCoinData } from '../API/api';
 
-
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
-    const [data, setdata] = useState({ current_price: 0, price_change_percentage_24h: 0});
+    const [data, setdata] = useState([]);
+    //current_price: 0, price_change_percentage_24h: 0
     const [loader, setloader] = useState(true);
 
 
     const getResult = async () => {
         const res = await fetchCoinData(coinid);
         setdata(res.data[0]);
-
         setloader(false);
     }
 
@@ -21,7 +20,9 @@ const CoinDetails = ({ route }) => {
         getResult();
     }, [])
 
+
     if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
+
 
     return (
         <>
@@ -54,7 +55,6 @@ const CoinDetails = ({ route }) => {
 
                     </View>
                 </View>
-
                 <View style={styles.mid}>
                 </View>
             </View>
