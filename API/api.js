@@ -4,13 +4,27 @@ const apiurl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&o
 const specificcoin = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true";
 const priceapi = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd';
 export const fetchData = async() =>{
-    return axios.get(`${apiurl}`);
+    try{
+        return axios.get(`${apiurl}`);
+    }
+    catch(error){
+        console.log(error);
+    }
 }
 
 export const fetchCoinData = async(coinid) =>{
-    return axios.get(`${specificcoin}&ids=${coinid}`);
+
+    try {   
+        return axios.get(`${specificcoin}&ids=${coinid}`);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const fetchPrice = async(number)=>{
-    return axios.get(`${priceapi}&days=${number}`);
+    try {
+        return axios.get(`${priceapi}&days=${number}`);
+    } catch (error) {
+        console.log(error);
+    }
 }

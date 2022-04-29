@@ -7,38 +7,44 @@ import { LineChart } from 'react-native-wagmi-charts';
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
     const [data, setdata] = useState([]);
-    //current_price: 0, price_change_percentage_24h: 0
     const [loader, setloader] = useState(true);
+    const [graphloader, setgraphloader] = useState(true);
     const [price, setPrice] = useState([]);
     const [current, setCurrent] = useState("24h");
 
     const find24h = async () => {
-        const priceres = await fetchPrice(1);
-        setPrice(priceres.data.prices);
+        const prices = await fetchPrice(1);
+        setPrice(prices.data.prices);
         setCurrent("24h")
+        setgraphloader(false)
     }
     const find10d = async () => {
-        const priceres = await fetchPrice(10);
-        setPrice(priceres.data.prices);
+        const prices = await fetchPrice(10);
+        setPrice(prices.data.prices);
         setCurrent("10d")
+        setgraphloader(false)
     }
     const find1m = async () => {
-        const priceres = await fetchPrice(30);
-        setPrice(priceres.data.prices);
+        const prices = await fetchPrice(30);
+        setPrice(prices.data.prices);
         setCurrent("1m")
+        setgraphloader(false)
     }
     const find1y = async () => {
-        const priceres = await fetchPrice(365);
-        setPrice(priceres.data.prices);
+        const prices = await fetchPrice(365);
+        setPrice(prices.data.prices);
         setCurrent("1y")
+        setgraphloader(false)
     }
 
     const getResult = async () => {
         const res = await fetchCoinData(coinid);
-        const priceres = await fetchPrice(1);
+        const prices = await fetchPrice(1);
         setdata(res.data[0]);
-        setPrice(priceres.data.prices);
+        setPrice(prices.data.prices);
+        setCurrent("24h")
         setloader(false);
+        setgraphloader(false)
     }
 
     useEffect(() => {
@@ -53,9 +59,6 @@ const CoinDetails = ({ route }) => {
 
 
 
-
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
 
     const pricefinal = price.map(([timestamp, value]) => ({ timestamp, value }))
 
@@ -111,13 +114,19 @@ const CoinDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.mid}>
+                    {   graphloader === true ? (
+                        <ActivityIndicator size='small' color="#ffff"/>
+                    ) : (
+                        <>
                     <Text style={styles.text_24h}>{current}</Text>
                     <LineChart.Provider data={pricefinal}>
-                        <LineChart width={width / 1.05} height={130}>
+                        <LineChart width={Dimensions.get('window').width / 1.05} height={130}>
                             <LineChart.Path color="#2FA4FF" width={1}>
                             </LineChart.Path>
                         </LineChart>
                     </LineChart.Provider>
+                        </>
+                    )}
                 </View>
                 <View style={styles.timechanger}>
                             <TouchableOpacity style={styles.timechanger_touchable} onPress={find24h}>
@@ -139,7 +148,7 @@ const CoinDetails = ({ route }) => {
                             Market Rank
                         </Text>
                         <Text style={styles.description}>
-                            ${data.market_cap_rank}
+                            {data.market_cap_rank}
                         </Text>
                     </View>
 
@@ -161,6 +170,9 @@ const CoinDetails = ({ route }) => {
                         </Text>
                     </View>
 
+                </View>
+                <View style={styles.more}>
+                    
                 </View>
                 <Button onPress={onShare} title="Share"></Button>
             </View>
@@ -248,10 +260,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     timechanger_touchable: {
-        backgroundColor: '#EE5007',
+        backgroundColor: '#333C83',
         padding: 3,
         borderRadius: 5,
-        width: '20%',
+        width: '22%',
         height: '60%',
         justifyContent: 'center',
         alignItems: 'center'
