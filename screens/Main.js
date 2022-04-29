@@ -14,12 +14,18 @@ const Main = () => {
   const [data, setdata] = useState([]);
   const [loader, setloader] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [page, setpage] = useState(1);
 
   const getResult = async () => {
-    const res = await fetchData();
+    const res = await fetchData(page);
     setdata(res.data);
     setloader(false);
     setLoading(false);
+  }
+
+  const handleLoadMore = () => {
+    setdata(data.concat(data))
+    setpage(page+1)
   }
 
   useEffect(() => {
@@ -41,8 +47,11 @@ const Main = () => {
          titleColor="#fff"
       />
       }
+        keyExtractor={(item, index) => String(index)}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        onEndReached = {handleLoadMore}
+        onEndReachedThreshold = {0}
         data={data}
         renderItem={(element) => {
           return (
