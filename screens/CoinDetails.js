@@ -1,19 +1,41 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions, TouchableOpacity, Share, Button,Alert } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
 import { fetchCoinData, fetchPrice } from '../API/api';
 import { LineChart } from 'react-native-wagmi-charts';
+
 const CoinDetails = ({ route }) => {
     const { coinid } = route.params;
     const [data, setdata] = useState([]);
     //current_price: 0, price_change_percentage_24h: 0
     const [loader, setloader] = useState(true);
     const [price, setPrice] = useState([]);
+    const [current, setCurrent] = useState("24h");
 
+    const find24h = async () => {
+        const priceres = await fetchPrice(1);
+        setPrice(priceres.data.prices);
+        setCurrent("24h")
+    }
+    const find10d = async () => {
+        const priceres = await fetchPrice(10);
+        setPrice(priceres.data.prices);
+        setCurrent("10d")
+    }
+    const find1m = async () => {
+        const priceres = await fetchPrice(30);
+        setPrice(priceres.data.prices);
+        setCurrent("1m")
+    }
+    const find1y = async () => {
+        const priceres = await fetchPrice(365);
+        setPrice(priceres.data.prices);
+        setCurrent("1y")
+    }
 
     const getResult = async () => {
         const res = await fetchCoinData(coinid);
-        const priceres = await fetchPrice();
+        const priceres = await fetchPrice(1);
         setdata(res.data[0]);
         setPrice(priceres.data.prices);
         setloader(false);
@@ -21,6 +43,10 @@ const CoinDetails = ({ route }) => {
 
     useEffect(() => {
         getResult();
+        find24h();
+        find10d();
+        find1m();
+        find1y();
     }, [])
 
     if (loader) return <ActivityIndicator size='large' color="#ffff" style={styles.loader} />;
@@ -32,6 +58,26 @@ const CoinDetails = ({ route }) => {
     const height = Dimensions.get('window').height;
 
     const pricefinal = price.map(([timestamp, value]) => ({ timestamp, value }))
+
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+                message:
+                    `Hey!👋 I found the status for 🤑 ${data.name} (Mkt cap rank: ${data.market_cap_rank}) from CryptoStack. Current price is $${data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}, Mkt cap is $${data.market_cap.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} and price change percentage in last 24h is ${data.price_change_percentage_24h}%. ⬇️📲 Download CryptoStack for more!`
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
     return (
         <>
@@ -65,22 +111,58 @@ const CoinDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.mid}>
-                    <Text style={styles.graphdetails_1}>
-                    24h High: ${data.high_24h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </Text>
-                    <Text style={styles.graphdetails_2}>
-                    24h Low: ${data.low_24h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                    </Text>
+                    <Text style={styles.text_24h}>{current}</Text>
                     <LineChart.Provider data={pricefinal}>
-                        <LineChart width={width/1.05} height={130}>
+                        <LineChart width={width / 1.05} height={130}>
                             <LineChart.Path color="#2FA4FF" width={1}>
                             </LineChart.Path>
                         </LineChart>
                     </LineChart.Provider>
                 </View>
+                <View style={styles.timechanger}>
+                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find24h}>
+                                <Text style={styles.timechanger_text}>24h</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find10d}>
+                                <Text style={styles.timechanger_text}>10d</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find1m}>
+                                <Text style={styles.timechanger_text}>1m</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find1y}>
+                                <Text style={styles.timechanger_text}>1y</Text>
+                            </TouchableOpacity>
+                </View>
                 <View style={styles.bottom}>
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text style={styles.title}>
+                            Market Rank
+                        </Text>
+                        <Text style={styles.description}>
+                            ${data.market_cap_rank}
+                        </Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'column'}}>
+                        <Text style={styles.title}>
+                            24h Low
+                        </Text>
+                        <Text style={styles.description}>
+                            ${data.low_24h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'column'}}>
+                        <Text style={styles.title}>
+                            24h High
+                        </Text>
+                        <Text style={styles.description}>
+                            ${data.high_24h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </Text>
+                    </View>
 
                 </View>
+                <Button onPress={onShare} title="Share"></Button>
             </View>
         </>
     )
@@ -94,7 +176,7 @@ const styles = StyleSheet.create({
     },
     uppar: {
         width: '100%',
-        height: Dimensions.get('window').height/9,
+        height: Dimensions.get('window').height / 9,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -148,35 +230,67 @@ const styles = StyleSheet.create({
     },
     mid: {
         width: '95%',
-        height: Dimensions.get('window').height/4.5,
+        height: Dimensions.get('window').height / 5,
         backgroundColor: '#212245',
         borderRadius: 12,
         marginTop: 5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
-    graphdetails_1: {
-        color: '#B6FFCE',
-        alignSelf: 'flex-end',
-        marginRight: 13,
-        fontSize: 13,
-    },
-    graphdetails_2: {
-        color: 'yellow',
-        alignSelf: 'flex-end',
-        marginRight: 13,
-        fontSize: 13,
-        marginTop: 2
-    },
-    bottom: {
+    timechanger:{
         width: '95%',
-        height: Dimensions.get('window').height*(40/100),
+        height: Dimensions.get('window').height / 20,
         backgroundColor: '#212245',
         borderRadius: 12,
         marginTop: 12,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-evenly',
     },
+    timechanger_touchable: {
+        backgroundColor: '#EE5007',
+        padding: 3,
+        borderRadius: 5,
+        width: '20%',
+        height: '60%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    timechanger_text:{
+        color: 'white'
+    },
+    text_24h: {
+        color: 'white',
+        alignSelf: 'flex-end',
+        marginRight: 13,
+        fontSize: 13,
+    },
+    bottom: {
+        width: '95%',
+        height: Dimensions.get('window').height * (10 / 100),
+        backgroundColor: '#212245',
+        borderRadius: 12,
+        marginTop: 12,
+        paddingHorizontal: 10,
+        paddingVertical: 12,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    title: {
+        color: '#4F4E7E',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    description: {
+        marginTop: 6,
+        color: 'white',
+        fontSize: 17,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    }
+
 }
 )
 
