@@ -12,6 +12,8 @@ const CoinDetails = ({ route }) => {
     const [price, setPrice] = useState([]);
     const [current, setCurrent] = useState("24h");
 
+
+
     const find24h = async () => {
         const prices = await fetchPrice(1);
         setPrice(prices.data.prices);
@@ -45,6 +47,10 @@ const CoinDetails = ({ route }) => {
         setCurrent("24h")
         setloader(false);
         setgraphloader(false)
+    }
+
+    const doRefresh = () => {
+        getResult()
     }
 
     useEffect(() => {
@@ -83,7 +89,7 @@ const CoinDetails = ({ route }) => {
     };
 
     function kFormatter(num) {
-        return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k' : Math.sign(num)*Math.abs(num)
+        return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
     }
 
     return (
@@ -234,7 +240,15 @@ const CoinDetails = ({ route }) => {
                         </View>
                     </View>
                 </View>
-                <Button onPress={onShare} title="Share"></Button>
+                <View style={styles.footerbtns}>
+                <TouchableOpacity style={styles.refreshbtn} onPress={doRefresh}>
+                        <MaterialCommunityIcons name='refresh' size={20} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sharebtn} onPress={onShare}>
+                        <Text style={{ fontSize: 16, color: "white", marginRight: 5 }}>Share</Text>
+                        <MaterialCommunityIcons name='share' size={20} color="white" />
+                    </TouchableOpacity>
+                </View>
             </View>
         </>
     )
@@ -386,6 +400,34 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginBottom: 13
     },
+    footerbtns: {
+        width: '95%',
+        marginTop: 15,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+        flexDirection: 'row'
+    },
+    refreshbtn: {
+        marginRight: 7,
+        backgroundColor: '#7FB5FF',
+        borderRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 42,
+        height: 42,
+        padding: 2,
+        flexDirection: 'row'
+    },
+    sharebtn: {
+        backgroundColor: '#7FB5FF',
+        borderRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 100,
+        height: 42,
+        padding: 2,
+        flexDirection: 'row'
+    }
 }
 )
 
