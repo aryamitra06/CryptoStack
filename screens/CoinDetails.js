@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions, TouchableOpacity, Share, Button,Alert } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator, Dimensions, TouchableOpacity, Share, Button, ScrollView } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState, useEffect } from 'react'
 import { fetchCoinData, fetchPrice } from '../API/api';
@@ -82,6 +82,10 @@ const CoinDetails = ({ route }) => {
         }
     };
 
+    function kFormatter(num) {
+        return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k' : Math.sign(num)*Math.abs(num)
+    }
+
     return (
         <>
             <View style={styles.container}>
@@ -114,33 +118,33 @@ const CoinDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.mid}>
-                    {   graphloader === true ? (
-                        <ActivityIndicator size='small' color="#ffff"/>
+                    {graphloader === true ? (
+                        <ActivityIndicator size='small' color="#ffff" />
                     ) : (
                         <>
-                    <Text style={styles.text_24h}>{current}</Text>
-                    <LineChart.Provider data={pricefinal}>
-                        <LineChart width={Dimensions.get('window').width / 1.05} height={130}>
-                            <LineChart.Path color="#2FA4FF" width={1}>
-                            </LineChart.Path>
-                        </LineChart>
-                    </LineChart.Provider>
+                            <Text style={styles.text_24h}>{current}</Text>
+                            <LineChart.Provider data={pricefinal}>
+                                <LineChart width={Dimensions.get('window').width / 1.05} height={130}>
+                                    <LineChart.Path color="#2FA4FF" width={1}>
+                                    </LineChart.Path>
+                                </LineChart>
+                            </LineChart.Provider>
                         </>
                     )}
                 </View>
                 <View style={styles.timechanger}>
-                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find24h}>
-                                <Text style={styles.timechanger_text}>24h</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find10d}>
-                                <Text style={styles.timechanger_text}>10d</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find1m}>
-                                <Text style={styles.timechanger_text}>1m</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.timechanger_touchable} onPress={find1y}>
-                                <Text style={styles.timechanger_text}>1y</Text>
-                            </TouchableOpacity>
+                    <TouchableOpacity style={styles.timechanger_touchable} onPress={find24h}>
+                        <Text style={styles.timechanger_text}>24h</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.timechanger_touchable} onPress={find10d}>
+                        <Text style={styles.timechanger_text}>10d</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.timechanger_touchable} onPress={find1m}>
+                        <Text style={styles.timechanger_text}>1m</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.timechanger_touchable} onPress={find1y}>
+                        <Text style={styles.timechanger_text}>1y</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.bottom}>
                     <View style={{ flexDirection: 'column' }}>
@@ -148,11 +152,11 @@ const CoinDetails = ({ route }) => {
                             Market Rank
                         </Text>
                         <Text style={styles.description}>
-                            {data.market_cap_rank}
+                            #{data.market_cap_rank}
                         </Text>
                     </View>
 
-                    <View style={{ flexDirection: 'column'}}>
+                    <View style={{ flexDirection: 'column' }}>
                         <Text style={styles.title}>
                             24h Low
                         </Text>
@@ -161,7 +165,7 @@ const CoinDetails = ({ route }) => {
                         </Text>
                     </View>
 
-                    <View style={{ flexDirection: 'column'}}>
+                    <View style={{ flexDirection: 'column' }}>
                         <Text style={styles.title}>
                             24h High
                         </Text>
@@ -171,8 +175,64 @@ const CoinDetails = ({ route }) => {
                     </View>
 
                 </View>
+                <View style={{ alignItems: 'flex-start', justifyContent: 'space-around', width: "95%", height: 40 }}>
+                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>More</Text>
+                </View>
                 <View style={styles.more}>
-                    
+                    <View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.title_more}>
+                                Total Market Cap
+                            </Text>
+                            <Text style={styles.description_more}>
+                                $ {data.market_cap.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.title_more}>
+                                Total Supply
+                            </Text>
+                            <Text style={styles.description_more}>
+                                $ {data.total_supply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.title_more}>
+                                Total Volume
+                            </Text>
+                            <Text style={styles.description_more}>
+                                $ {data.total_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </Text>
+                        </View>
+                    </View>
+
+
+                    <View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.title_more}>
+                                All Time High
+                            </Text>
+                            <Text style={styles.description_more}>
+                                $ {data.ath.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.title_more}>
+                                All Time Low
+                            </Text>
+                            <Text style={styles.description_more}>
+                                $ {data.atl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({data.ath_change_percentage.toFixed(2)} %)
+                            </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.title_more}>
+                                Total Volume
+                            </Text>
+                            <Text style={styles.description_more}>
+                                $ {data.total_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({kFormatter(data.atl_change_percentage.toFixed(2))} %)
+                            </Text>
+                        </View>
+                    </View>
                 </View>
                 <Button onPress={onShare} title="Share"></Button>
             </View>
@@ -192,7 +252,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#212245',
         width: '95%',
         borderRadius: 12,
         marginTop: 2,
@@ -249,7 +308,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    timechanger:{
+    timechanger: {
         width: '95%',
         height: Dimensions.get('window').height / 20,
         backgroundColor: '#212245',
@@ -268,7 +327,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    timechanger_text:{
+    timechanger_text: {
         color: 'white'
     },
     text_24h: {
@@ -301,8 +360,32 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: 'bold',
         textAlign: 'center'
-    }
+    },
+    more: {
+        width: '95%',
+        height: Dimensions.get('window').height / 4.5,
+        backgroundColor: '#212245',
+        borderRadius: 12,
+        paddingHorizontal: 10,
+        paddingVertical: 12,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexDirection: 'row'
 
+    },
+    title_more: {
+        color: '#4F4E7E',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'left'
+    },
+    description_more: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        marginBottom: 13
+    },
 }
 )
 
