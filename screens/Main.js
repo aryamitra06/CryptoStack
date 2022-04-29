@@ -17,15 +17,15 @@ const Main = () => {
   const [page, setpage] = useState(1);
 
   const getResult = async () => {
-    const res = await fetchData(page);
+    const res = await fetchData(1);
     setdata(res.data);
     setloader(false);
     setLoading(false);
   }
 
   const handleLoadMore = () => {
-    setdata(data.concat(data))
     setpage(page+1)
+    setdata(data.concat(data))
   }
 
   useEffect(() => {
