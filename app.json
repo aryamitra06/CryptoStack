@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#181631"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,13 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aryamitrachaudhuri.cryptostack",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#181631"
+      },
+      "package": "com.aryamitrachaudhuri.cryptostack",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

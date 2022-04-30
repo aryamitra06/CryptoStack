@@ -22,7 +22,7 @@ export default function App() {
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator initialRouteName='Welcome'>
         <Stack.Screen name='Welcome' component={Welcome} options={{headerShown: false}}/>
-        <Stack.Screen name='Main' component={Main} options={{headerRight: (props) => <MaterialCommunityIcons name='magnify' size={28} color= "white"/>,headerBackTitle: "", title: "CryptoStack", headerStyle: {backgroundColor: "#181631"}, headerTintColor: "white", headerTitleStyle: {color: "white"}, headerShadowVisible: false}}/>
+        <Stack.Screen name='Main' component={Main} options={{headerBackTitle: "", title: "CryptoStack", headerStyle: {backgroundColor: "#181631"}, headerTintColor: "white", headerTitleStyle: {color: "white"}, headerShadowVisible: false}}/>
         <Stack.Screen name='Coin' component={Coin} options={{headerShown: false}}/>
         <Stack.Screen name='CoinDetails' component={CoinDetails} options={{ headerBackTitle: "", title: "", headerStyle: {backgroundColor: "#181631"}, headerTintColor: "white", headerTitleStyle: {color: "white"}, headerShadowVisible: false}}/>
       </Stack.Navigator>

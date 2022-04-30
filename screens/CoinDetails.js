@@ -104,7 +104,7 @@ const CoinDetails = ({ route }) => {
                     </View>
                     <View style={styles.uppar_text}>
                         <Text style={styles.uppar_text_1}>{data.name}</Text>
-                        <Text style={styles.uppar_text_2}>Current: ${data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                        <Text style={styles.uppar_text_2}>Current: $ {data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                     </View>
                     <View style={styles.upper_status}>
                         <View style={styles.upper_status_1}>
@@ -116,9 +116,9 @@ const CoinDetails = ({ route }) => {
                         </View>
 
                         {data.price_change_percentage_24h < 0 ? (
-                            <Text style={styles.upper_status_2_red}>{data.price_change_percentage_24h.toFixed(2)}% Today</Text>
+                            <Text style={styles.upper_status_2_red}>{data.price_change_percentage_24h.toFixed(2)} % Today</Text>
                         ) : (
-                            <Text style={styles.upper_status_2_green}>{data.price_change_percentage_24h.toFixed(2)}% Today</Text>
+                            <Text style={styles.upper_status_2_green}>{data.price_change_percentage_24h.toFixed(2)} % Today</Text>
                         )}
 
                     </View>
@@ -219,7 +219,7 @@ const CoinDetails = ({ route }) => {
                                 All Time High
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.ath.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                $ {data.ath.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({data.ath_change_percentage.toFixed(2)} %)
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
@@ -227,15 +227,15 @@ const CoinDetails = ({ route }) => {
                                 All Time Low
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.atl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({data.ath_change_percentage.toFixed(2)} %)
+                                $ {data.atl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({kFormatter(data.atl_change_percentage.toFixed(2))} %)
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={styles.title_more}>
-                                Total Volume
+                            Circulating Supply
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.total_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({kFormatter(data.atl_change_percentage.toFixed(2))} %)
+                                $ {data.circulating_supply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 
                             </Text>
                         </View>
                     </View>
