@@ -104,7 +104,7 @@ const CoinDetails = ({ route }) => {
                     </View>
                     <View style={styles.uppar_text}>
                         <Text style={styles.uppar_text_1}>{data.name}</Text>
-                        <Text style={styles.uppar_text_2}>Current: $ {data.current_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+                        <Text style={styles.uppar_text_2}>Current: $ {data.current_price}</Text>
                     </View>
                     <View style={styles.upper_status}>
                         <View style={styles.upper_status_1}>
@@ -167,7 +167,7 @@ const CoinDetails = ({ route }) => {
                             24h Low
                         </Text>
                         <Text style={styles.description}>
-                            ${data.low_24h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            ${data.low_24h}
                         </Text>
                     </View>
 
@@ -176,7 +176,7 @@ const CoinDetails = ({ route }) => {
                             24h High
                         </Text>
                         <Text style={styles.description}>
-                            ${data.high_24h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            ${data.high_24h}
                         </Text>
                     </View>
 
@@ -191,7 +191,7 @@ const CoinDetails = ({ route }) => {
                                 Total Market Cap
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.market_cap.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                $ {data.market_cap}
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
@@ -199,7 +199,7 @@ const CoinDetails = ({ route }) => {
                                 Total Supply
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.total_supply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                $ {data.total_supply}
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
@@ -207,7 +207,7 @@ const CoinDetails = ({ route }) => {
                                 Total Volume
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.total_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                $ {data.total_volume}
                             </Text>
                         </View>
                     </View>
@@ -219,7 +219,7 @@ const CoinDetails = ({ route }) => {
                                 All Time High
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.ath.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({data.ath_change_percentage.toFixed(2)} %)
+                                $ {data.ath} ({data.ath_change_percentage.toFixed(2)} %)
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
@@ -227,7 +227,7 @@ const CoinDetails = ({ route }) => {
                                 All Time Low
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.atl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ({kFormatter(data.atl_change_percentage.toFixed(2))} %)
+                                $ {data.atl} ({kFormatter(data.atl_change_percentage.toFixed(2))} %)
                             </Text>
                         </View>
                         <View style={{ flexDirection: 'column' }}>
@@ -235,7 +235,7 @@ const CoinDetails = ({ route }) => {
                             Circulating Supply
                             </Text>
                             <Text style={styles.description_more}>
-                                $ {data.circulating_supply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 
+                                $ {data.circulating_supply} 
                             </Text>
                         </View>
                     </View>
